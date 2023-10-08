@@ -3,7 +3,7 @@ import { useMoralis, useWeb3Contract } from "react-moralis";
 import nftAbi from "../constants/BasicNft.json";
 import marketplaceAbi from "../constants/NftMarketplace.json";
 import Image from "next/image";
-import { Card } from "web3uikit";
+import { Card, useNotification } from "web3uikit";
 import { ethers } from "ethers";
 import UpdatePriceModal from "./UpdatePriceModal.jsx";
 
@@ -21,6 +21,8 @@ export default function NFTBox({
     const [tokenName, setTokenName] = useState("");
     const [showModal, setShowModal] = useState(false);
 
+    // get the TokenURI from "tokenId" NFT
+    // base on TokenURI -> render the image
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         contractAddress: nftAddress,
         abi: nftAbi,
@@ -28,8 +30,16 @@ export default function NFTBox({
         params: { tokenId },
     });
 
-    // get the TokenURI from "tokenId" NFT
-    // base on TokenURI -> render the image
+    const { runContractFunction: buyItem } = useWeb3Contract({
+        contractAddress: marketplaceAddress,
+        abi: marketplaceAbi,
+        functionName: "buyItem",
+        params: {
+            nftContractAddress: nftAddress,
+            tokenId: tokenId,
+        },
+        msgValue: price,
+    });
 
     async function updateUI() {
         const tokenURI = await getTokenURI();
@@ -57,13 +67,38 @@ export default function NFTBox({
 
     const isOwner = seller === account || seller === undefined; // if there is no owner, you will be the owner
 
+    const dispatch = useNotification();
+    const handleBuyItemSuccess = async (tx) => {
+        await tx.wait(1);
+        dispatch({
+            type: "success",
+            title: "Buy NFT Success",
+            message: "NFT has been bought, please check your wallet!",
+            position: "topR",
+        });
+    };
+
     const handleCardClick = () => {
-        isOwner ? setShowModal(true) : console.log("Let's buy lil nigga");
+        isOwner
+            ? setShowModal(true)
+            : buyItem({
+                  onSuccess: handleBuyItemSuccess,
+                  onError: (e) => console.log(e),
+              });
+    };
+
+    const hideModal = () => {
+        setShowModal(false);
     };
 
     return (
         <div>
-            <UpdatePriceModal isVisiable={showModal}></UpdatePriceModal>
+            <UpdatePriceModal
+                isVisible={showModal}
+                nftAddress={nftAddress}
+                tokenId={tokenId}
+                hideModal={hideModal}
+            ></UpdatePriceModal>
             <Card
                 title={tokenName}
                 description={tokenDescription}

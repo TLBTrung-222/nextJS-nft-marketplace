@@ -1,19 +1,39 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import { Form } from "web3uikit";
 
 export default function Home() {
+    const approveAndList = (data) => {};
+
     return (
         <>
-            <Head>
-                <title>NFT Marketplace</title>
-                <meta name="description" content="NFT Marketplace" />
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1"
-                />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
+            <Form
+                onSubmit={approveAndList}
+                data={[
+                    {
+                        name: "NFT Address",
+                        type: "text",
+                        inputWidth: "50%",
+                        value: "",
+                        key: "nftAddress",
+                    },
+                    {
+                        name: "Token ID",
+                        type: "number",
+                        inputWidth: "20%",
+                        value: "",
+                        key: "tokenId",
+                    },
+                    {
+                        name: "Price (in ETH)",
+                        type: "number",
+                        inputWidth: "20%",
+                        value: "0",
+                    },
+                ]}
+                title="Sell your NFT!"
+            ></Form>
             <h1>Sell page</h1>
         </>
     );

@@ -10,7 +10,7 @@ export default function Home() {
             <h1 className="py-4 px-4 font-bold text-2xl">Recently listed</h1>
             {isWeb3Enabled ? (
                 <div className="flex flex-wrap">
-                    <NFTBox
+                    <NFTBox // hardcode it because we don't user any server
                         price={"100000000000000000"}
                         nftAddress={
                             "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
@@ -21,7 +21,7 @@ export default function Home() {
                         }
                         seller={"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"}
                     ></NFTBox>
-                    <NFTBox // hardcode it because we don't user any server
+                    <NFTBox
                         price={"200000000000000000"}
                         nftAddress={
                             "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
@@ -32,7 +32,7 @@ export default function Home() {
                         }
                         seller={"0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"}
                     ></NFTBox>
-                    <NFTBox // hardcode it because we don't user any server
+                    <NFTBox
                         price={"200000000000000000"}
                         nftAddress={
                             "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
