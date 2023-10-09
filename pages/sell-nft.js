@@ -1,13 +1,109 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { Form } from "web3uikit";
+import { Form, useNotification } from "web3uikit";
+import { useMoralis, useWeb3Contract } from "react-moralis";
+import { ethers } from "ethers";
+import contractAddresses from "../constants/ContractAddresses.json";
+import nftAbi from "../constants/BasicNft.json";
+import nftMarketplaceAbi from "../constants/NftMarketplace.json";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-    const approveAndList = (data) => {};
+    const { isWeb3Enabled, chainId: chainIdHex, account } = useMoralis();
+    const chainId = parseInt(chainIdHex);
+    const nftMarketplaceAddress = chainId
+        ? contractAddresses[chainId].NftMarketplace[0]
+        : "31337";
+
+    const { runContractFunction } = useWeb3Contract();
+    const dispatch = useNotification();
+    const [proceeds, setProceeds] = useState("0");
+
+    // when user submit, need to approve the NFT and list it
+    const approveAndList = async (data) => {
+        // approve NFT
+        console.log("Approving...");
+        const nftAddress = data.data[0].inputResult;
+        const tokenId = data.data[1].inputResult;
+        const price = ethers.utils
+            .parseEther(data.data[2].inputResult)
+            .toString();
+        const approveOptions = {
+            contractAddress: nftAddress,
+            abi: nftAbi,
+            functionName: "approve",
+            params: {
+                to: nftMarketplaceAddress,
+                tokenId: tokenId,
+            },
+        };
+
+        await runContractFunction({
+            params: approveOptions,
+            onSuccess: (tx) =>
+                handleApproveSuccess(tx, nftAddress, tokenId, price),
+            onError: (e) => console.log(e),
+        });
+    };
+
+    const handleApproveSuccess = async (tx, nftAddress, tokenId, price) => {
+        console.log("Ok! Now time to list");
+        await tx.wait(1);
+        // list NFT to marketplace
+        const listOptions = {
+            contractAddress: nftMarketplaceAddress,
+            abi: nftMarketplaceAbi,
+            functionName: "listItem",
+            params: {
+                nftContractAddress: nftAddress,
+                tokenId: tokenId,
+                price: price,
+            },
+        };
+
+        await runContractFunction({
+            params: listOptions,
+            onSuccess: handleListSuccess, // trigger notification
+            onError: (e) => console.log(e),
+        });
+    };
+
+    const handleListSuccess = async (tx) => {
+        await tx.wait(1);
+        dispatch({
+            type: "success",
+            message: "NFT listing",
+            title: "NFT listed",
+            position: "topR",
+        });
+    };
+
+    async function setupUI() {
+        // get the proceeds of seller
+        const returnedProceeds = await runContractFunction({
+            params: {
+                contractAddress: nftMarketplaceAddress,
+                abi: nftMarketplaceAbi,
+                functionName: "getProceeds",
+                params: {
+                    seller: account,
+                },
+            },
+            onError: (e) => console.log(e),
+        });
+
+        if (returnedProceeds) {
+            setProceeds(returnedProceeds.toString());
+        }
+    }
+
+    useEffect(() => {
+        setupUI();
+    }, [proceeds, account, chainId, isWeb3Enabled]);
 
     return (
-        <>
+        <div>
             <Form
                 onSubmit={approveAndList}
                 data={[
@@ -34,7 +130,28 @@ export default function Home() {
                 ]}
                 title="Sell your NFT!"
             ></Form>
-            <h1>Sell page</h1>
-        </>
+
+            <div>Withdraw {proceeds} proceeds</div>
+            {proceeds != "0" ? (
+                <Button
+                    onClick={async () => {
+                        // await runContractFunction({
+                        //     params: {
+                        //         abi: nftMarketplaceAbi,
+                        //         contractAddress: nftMarketplaceAddress,
+                        //         functionName: "withdrawProceeds",
+                        //         params: {},
+                        //     },
+                        //     onError: (error) => console.log(error),
+                        //      onSuccess: () => handleWithdrawSuccess,
+                        // });
+                    }}
+                    text="Withdraw"
+                    type="button"
+                />
+            ) : (
+                <div>No proceeds detected</div>
+            )}
+        </div>
     );
 }
