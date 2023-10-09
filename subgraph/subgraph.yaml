@@ -1,33 +1,33 @@
 specVersion: 0.0.5
 schema:
-  file: ./schema.graphql
+    file: ./schema.graphql
 dataSources:
-  - kind: ethereum
-    name: NftMarketplace
-    network: sepolia
-    source:
-      address: "0x975Fd2EfaA00Bd178A20B446A5f42f99958c71B3"
-      abi: NftMarketplace
-      startBlock: 4448951
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - ItemBought
-        - ItemCanceled
-        - ItemListed
-        - PriceUpdated
-      abis:
-        - name: NftMarketplace
-          file: ./abis/NftMarketplace.json
-      eventHandlers:
-        - event: ItemBought(indexed address,address,uint256,uint256)
-          handler: handleItemBought
-        - event: ItemCanceled(indexed address,uint256,address)
-          handler: handleItemCanceled
-        - event: ItemListed(indexed address,address,uint256,uint256)
-          handler: handleItemListed
-        - event: PriceUpdated(indexed address,uint256,address)
-          handler: handlePriceUpdated
-      file: ./src/nft-marketplace.ts
+    - kind: ethereum
+      name: NftMarketplace
+      network: sepolia
+      source:
+          address: "0x975Fd2EfaA00Bd178A20B446A5f42f99958c71B3"
+          abi: NftMarketplace
+          startBlock: 4448951
+      mapping:
+          kind: ethereum/events
+          apiVersion: 0.0.7
+          language: wasm/assemblyscript
+          entities:
+              - ItemBought
+              - ItemCanceled
+              - ItemListed
+              - PriceUpdated
+          abis:
+              - name: NftMarketplace
+                file: ./abis/NftMarketplace.json
+          eventHandlers:
+              - event: ItemBought(indexed address,address,uint256,uint256)
+                handler: handleItemBought
+              - event: ItemCanceled(indexed address,uint256,address)
+                handler: handleItemCanceled
+              - event: ItemListed(indexed address,address,uint256,uint256)
+                handler: handleItemListed
+              - event: PriceUpdated(indexed address,uint256,address)
+                handler: handlePriceUpdated
+          file: ./src/nft-marketplace.ts

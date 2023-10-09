@@ -10,6 +10,7 @@ import {
     ItemCanceled,
     ItemListed,
     ActiveItem,
+    PriceUpdated,
 } from "../generated/schema";
 
 export function handleItemBought(event: ItemBoughtEvent): void {
@@ -64,7 +65,7 @@ export function handleItemCanceled(event: ItemCanceledEvent): void {
         )
     );
     if (!itemCanceled) {
-        itemCanceled = new ItemListed(
+        itemCanceled = new ItemCanceled(
             getIdFromEventParams(
                 event.params.tokenId,
                 event.params.nftContractAddress
@@ -128,6 +129,52 @@ export function handleItemListed(event: ItemListedEvent): void {
     activeItem.price = event.params.price;
 
     itemListed.save();
+    activeItem.save();
+}
+
+export function handlePriceUpdated(event: PriceUpdatedEvent): void {
+    let priceUpdated = PriceUpdated.load(
+        getIdFromEventParams(
+            event.params.tokenId,
+            event.params.nftContractAddress
+        )
+    );
+    let activeItem = ActiveItem.load(
+        //this is for updating the listing item
+        getIdFromEventParams(
+            event.params.tokenId,
+            event.params.nftContractAddress
+        )
+    );
+
+    //* if not listed, we create new instance with ID, and update params
+    if (!priceUpdated) {
+        priceUpdated = new PriceUpdated(
+            getIdFromEventParams(
+                event.params.tokenId,
+                event.params.nftContractAddress
+            )
+        );
+    }
+    if (!activeItem) {
+        activeItem = new ActiveItem(
+            getIdFromEventParams(
+                event.params.tokenId,
+                event.params.nftContractAddress
+            )
+        );
+    }
+
+    priceUpdated.nftContractAddress = event.params.nftContractAddress;
+    activeItem.nftAddress = event.params.nftContractAddress;
+
+    priceUpdated.seller = event.params.seller;
+    activeItem.seller = event.params.seller;
+
+    priceUpdated.tokenId = event.params.tokenId;
+    activeItem.tokenId = event.params.tokenId;
+
+    priceUpdated.save();
     activeItem.save();
 }
 

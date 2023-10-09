@@ -29,3 +29,10 @@ type ItemListed @entity(immutable: true) {
     tokenId: BigInt! # uint256
     price: BigInt! # uint256
 }
+
+type PriceUpdated @entity {
+    id: ID!
+    seller: Bytes! # address
+    nftContractAddress: Bytes! # address
+    tokenId: BigInt! # uint256
+}
