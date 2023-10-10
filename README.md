@@ -1,40 +1,113 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NextJS NFT Marketplace with TheGraph
 
-## Getting Started
+This project aim to create a transparent NFT marketplace for user to sell and buy NFTs. The data for listing items will be queried from TheGraph API endpoint.
 
-First, run the development server:
+### [Demo on Vercel](https://nft-marketplace-fawn-two.vercel.app/sell-nft)
+
+![](demo.png)
+
+## Description
+
+I divided this project into 2 repos: Smart contract development and Front-end development:  
+[Front-end repo](https://github.com/TLBTrung-222/hardhat-nft-marketplace.git)  
+[Smart contract repo](https://github.com/TLBTrung-222/hardhat-nft-marketplace.git)
+
+Tech-stack:
+
+-   Front-end:
+    -   [`Next.js`](https://nextjs.org/) (popular React framework for the Web)
+    -   [`react-moralis`](https://github.com/MoralisWeb3/react-moralis) (interaction between Front-end and blockchain)
+    -   [`TheGraph`](https://thegraph.com/) (accessing the blockchain data)
+-   Smart contract:
+    -   [`Hardhat`](https://hardhat.org/) (popular framework for developing smartcontract)
+    -   [`hardhat-deploy`](https://github.com/wighawag/hardhat-deploy) (a hardhat plugin for replicable deployments and easy testing)
+
+# Installation
+
+### Requirements
+
+You will need to have `node.js` and `yarn` installed.
+
+## 1. Clone the repos
+
+In it's own terminal / command line, clone both repos:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/TLBTrung-222/nextJS-nft-marketplace.git
+git clone https://github.com/TLBTrung-222/hardhat-nft-marketplace.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 2. Deploy your contract to sepolia
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+To deploy contract, remember to created `.env` file with your `PRIVATE_KEY` from your wallet (Metamask, ...).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+After installing dependencies, deploy your contracts to sepolia
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+cd hardhat-nft-marketplace
+yarn
+yarn hardhat deploy --network sepolia
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+If you want to deploy contract to other network, make sure you have configured that network on `hardhat.config.js`
 
-## Learn More
+## 3. Deploy your subgraph
 
-To learn more about Next.js, take a look at the following resources:
+In order to listen for events emitted on blockchain to retrieve data, we will use TheGraph
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Install Subgraph CLI
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+yarn global add @graphprotocol/graph-cli
+```
 
-## Deploy on Vercel
+2. Log into [the graph UI](https://thegraph.com/studio/subgraph) and create a new Subgraph.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Use `Ethereum Sepolia` as the network.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3. Install dependencies and Initialize Subgraph
+
+```bash
+cd ../nextJS-nft-marketplace
+yarn
+graph init --studio nft-marketplace
+```
+
+4. Authenticate CLI
+
+```bash
+graph auth  --studio YOUR_DEPLOY_KEY_HERE
+```
+
+5. Update your `subgraph.yaml`
+
+-   Update the `address` with your NftMarketplace Address
+-   Update the `startBlock` with the block right before your contract was deployed
+
+6. Build graph locally
+
+```bash
+graph codegen && graph build
+```
+
+-   `graph codegen`: Generates code in the `generated` folder based on your `schema.graphql`
+-   `graph build`: Generates the `build` folder that will be uploaded to the graph
+
+7. Deploy subgraph
+
+Replace `VERSION_NUMBER_HERE` with a version number like `v0.0.1`.
+
+```bash
+graph deploy --studio nft-marketplace -l VERSION_NUMBER_HERE
+```
+
+## 4. Start your UI locally
+
+Make sure that:
+
+-   You have created an `.env` file and have a `PRIVATE_KEY`
+-   Your wallet have some ETH testnet to interact. If you don't, feel free to get some from [Sepolia ETH faucet](https://sepoliafaucet.com/)
+
+```bash
+yarn dev
+```
