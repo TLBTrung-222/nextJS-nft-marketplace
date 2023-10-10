@@ -9,7 +9,7 @@ This project aim to create a transparent NFT marketplace for user to sell and bu
 ## Description
 
 I divided this project into 2 repos: Smart contract development and Front-end development:  
-[Front-end repo](https://github.com/TLBTrung-222/hardhat-nft-marketplace.git)  
+[Front-end repo](https://github.com/TLBTrung-222/nextJS-nft-marketplace.git)  
 [Smart contract repo](https://github.com/TLBTrung-222/hardhat-nft-marketplace.git)
 
 Tech-stack:
