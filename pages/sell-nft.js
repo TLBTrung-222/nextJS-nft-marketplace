@@ -98,6 +98,16 @@ export default function Home() {
         }
     }
 
+    const handleWithdrawSuccess = async (tx) => {
+        await tx.wait(1);
+        dispatch({
+            type: "success",
+            message: "Withdraw success",
+            title: "Withdraw proceeds success, please check your wallet",
+            position: "topR",
+        });
+    };
+
     useEffect(() => {
         setupUI();
     }, [proceeds, account, chainId, isWeb3Enabled]);
@@ -131,20 +141,22 @@ export default function Home() {
                 title="Sell your NFT!"
             ></Form>
 
-            <div>Withdraw {proceeds} proceeds</div>
+            <div>
+                Withdraw {ethers.utils.formatEther(proceeds)} ETH as proceeds
+            </div>
             {proceeds != "0" ? (
                 <Button
                     onClick={async () => {
-                        // await runContractFunction({
-                        //     params: {
-                        //         abi: nftMarketplaceAbi,
-                        //         contractAddress: nftMarketplaceAddress,
-                        //         functionName: "withdrawProceeds",
-                        //         params: {},
-                        //     },
-                        //     onError: (error) => console.log(error),
-                        //      onSuccess: () => handleWithdrawSuccess,
-                        // });
+                        await runContractFunction({
+                            params: {
+                                abi: nftMarketplaceAbi,
+                                contractAddress: nftMarketplaceAddress,
+                                functionName: "withdrawProceeds",
+                                params: {},
+                            },
+                            onError: (error) => console.log(error),
+                            onSuccess: () => handleWithdrawSuccess,
+                        });
                     }}
                     text="Withdraw"
                     type="button"
