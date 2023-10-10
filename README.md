@@ -2,9 +2,15 @@
 
 This project aim to create a transparent NFT marketplace for user to sell and buy NFTs. The data for listing items will be queried from TheGraph API endpoint.
 
-### [Demo on Vercel](https://nft-marketplace-fawn-two.vercel.app/sell-nft)
+### [Demo on Vercel](https://nft-marketplace-fawn-two.vercel.app)
 
 ![](demo.png)
+
+## Acknowledgments
+
+I would like to express my sincere gratitude to the creators and contributors of the [Full Blockchain & Solidity Course - JavaScript Edition](https://github.com/smartcontractkit/full-blockchain-solidity-course-js) by Smart Contract Kit. This project wouldn't have been possible without guidance and resources provided by this course.
+
+-   **Course Creators**: [Patrick Collin](https://www.youtube.com/channel/UCn-3f8tw_E1jZvhuHatROwA)
 
 ## Description
 
@@ -37,9 +43,9 @@ git clone https://github.com/TLBTrung-222/nextJS-nft-marketplace.git
 git clone https://github.com/TLBTrung-222/hardhat-nft-marketplace.git
 ```
 
-## 2. Deploy your contract to sepolia
+## 2. Deploy your contract to sepolia (optional)
 
-To deploy contract, remember to created `.env` file with your `PRIVATE_KEY` from your wallet (Metamask, ...).
+You can choose to deploy a brand new contract or just use the contract I already deployed to blockchain. To deploy contract, remember to created `.env` file with your `PRIVATE_KEY` from your wallet (Metamask, ...).
 
 After installing dependencies, deploy your contracts to sepolia
 
@@ -111,3 +117,5 @@ Make sure that:
 ```bash
 yarn dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
