@@ -8,9 +8,9 @@ This project aim to create a transparent NFT marketplace for user to sell and bu
 
 ## Acknowledgments
 
-I would like to express my sincere gratitude to the creators and contributors of the [Full Blockchain & Solidity Course - JavaScript Edition](https://github.com/smartcontractkit/full-blockchain-solidity-course-js) by Smart Contract Kit. This project wouldn't have been possible without guidance and resources provided by this course.
+I would like to express my sincere gratitude to the creators and contributors of the [Full Blockchain & Solidity Course - JavaScript Edition](https://github.com/smartcontractkit/full-blockchain-solidity-course-js) by Free Code Camp. This project wouldn't have been possible without guidance and resources provided by this course.
 
--   **Course Creators**: [Patrick Collin](https://www.youtube.com/channel/UCn-3f8tw_E1jZvhuHatROwA)
+-   **Course Instructor**: [Patrick Collin](https://www.youtube.com/channel/UCn-3f8tw_E1jZvhuHatROwA)
 
 ## Description
 
@@ -24,6 +24,7 @@ Tech-stack:
     -   [`Next.js`](https://nextjs.org/) (popular React framework for the Web)
     -   [`react-moralis`](https://github.com/MoralisWeb3/react-moralis) (interaction between Front-end and blockchain)
     -   [`TheGraph`](https://thegraph.com/) (accessing the blockchain data)
+    -   [`Apollo-client`](https://www.apollographql.com/) (query data from TheGraph API endpoints using graphql)
 -   Smart contract:
     -   [`Hardhat`](https://hardhat.org/) (popular framework for developing smartcontract)
     -   [`hardhat-deploy`](https://github.com/wighawag/hardhat-deploy) (a hardhat plugin for replicable deployments and easy testing)
