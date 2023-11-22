@@ -9,7 +9,7 @@ import nftMarketplaceAbi from "../constants/NftMarketplace.json";
 export default function Home() {
     const { isWeb3Enabled, chainId: chainIdHex, account } = useMoralis();
     const chainId = parseInt(chainIdHex);
-    const nftMarketplaceAddress = chainId
+    const nftMarketplaceAddress = contractAddresses.chainId
         ? contractAddresses[chainId].NftMarketplace[0]
         : "31337";
 

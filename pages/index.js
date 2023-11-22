@@ -21,7 +21,7 @@ export default function Home() {
                 loading ? (
                     <div>Loading...</div>
                 ) : (
-                    <div className="flex flex-wrap">
+                    <div className="flex flex-wrap gap-4">
                         {/* Insert NFT Box here */}
                         {listedNfts.activeItems.map((nft) => {
                             return (
