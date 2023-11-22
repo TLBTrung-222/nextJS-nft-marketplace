@@ -1,13 +1,10 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import { Button, Form, useNotification } from "web3uikit";
-import { useMoralis, useWeb3Contract } from "react-moralis";
 import { ethers } from "ethers";
-import contractAddresses from "../constants/ContractAddresses.json";
-import nftAbi from "../constants/BasicNft.json";
-import nftMarketplaceAbi from "../constants/NftMarketplace.json";
 import { useEffect, useState } from "react";
+import { useMoralis, useWeb3Contract } from "react-moralis";
+import { Button, Form, useNotification } from "web3uikit";
+import nftAbi from "../constants/BasicNft.json";
+import contractAddresses from "../constants/ContractAddresses.json";
+import nftMarketplaceAbi from "../constants/NftMarketplace.json";
 
 export default function Home() {
     const { isWeb3Enabled, chainId: chainIdHex, account } = useMoralis();

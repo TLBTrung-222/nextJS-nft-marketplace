@@ -1,10 +1,8 @@
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import NFTBox from "../components/NFTBox";
+import { useQuery } from "@apollo/client";
 import { useMoralis } from "react-moralis";
+import NFTBox from "../components/NFTBox";
 import contractAddresses from "../constants/ContractAddresses.json";
 import GET_ACTIVE_ITEMS from "../constants/subgraphQueries";
-import { getApolloContext, useQuery } from "@apollo/client";
 
 export default function Home() {
     const { isWeb3Enabled, chainId: chainIdHex } = useMoralis();

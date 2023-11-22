@@ -1,14 +1,9 @@
-import "../styles/globals.css";
-import { MoralisProvider } from "react-moralis";
-import Header from "../components/Header";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Head from "next/head";
+import { MoralisProvider } from "react-moralis";
 import { NotificationProvider } from "web3uikit";
-import {
-    ApolloProvider,
-    ApolloClient,
-    gql,
-    InMemoryCache,
-} from "@apollo/client";
+import Header from "../components/Header";
+import "../styles/globals.css";
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
@@ -19,7 +14,6 @@ const client = new ApolloClient({
 export default function App({ Component, pageProps }) {
     return (
         <>
-            {" "}
             <Head>
                 <title>NFT Marketplace</title>
                 <meta name="description" content="NFT Marketplace" />
